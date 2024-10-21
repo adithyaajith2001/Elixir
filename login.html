@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elixir Login</title>
+  <link rel="stylesheet" href="/Front-End/Athmaja/login.css">
+</head>
+<body>
+  <div class="main">
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+       <div class="icon">
+          <h2 class="logo">Elixir</h2>
+       </div>
+       <div class="menu">
+          <ul>
+             <li><a href="#">HOME</a></li>
+             <li><a href="#">ABOUT</a></li>
+             <li><a href="#">SERVICE</a></li>
+             <li><a href="#">CONTACT</a></li>
+          </ul>
+       </div>
+    </div>
+    
+    <!-- Hero Section Text -->
+    <div class="hero-content">
+       <h1>Welcome to Elixir</h1>
+       <p>Where healthcare meets convenience</p>
+    </div>
+    
+  </div>
+  
+  <!-- Login Form -->
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <div class="checkbox">
+        <input type="checkbox" id="remember-me" name="remember-me">
+        <label for="remember-me">Remember me</label>
+      </div>
+
+      <label for="id-license">ID/License:</label>
+      <input type="text" id="id-license" name="id-license" required>
+
+      <button type="submit">Login</button>
+      <p>Or <a href="#">Sign Up</a></p>
+    </form>
+
+    <p><a href="#">Forgot Password?</a></p>
+  </div>
+
+  <!-- Link to the external JS file -->
+  <script>
+
+    document.getElementById("loginForm").addEventListener("submit", validateLogin);
+
+function validateLogin(event) {
+    event.preventDefault();  // Prevent the form from submitting automatically
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const idLicense = document.getElementById('id-license').value;
+
+    // Send the collected data to the server for validation
+    const loginData = {
+        username: username,
+        password: password,
+        idLicense: idLicense
+    };
+
+    // Simulate AJAX call to the backend for validation
+    fetch('/validate-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Login successful!');
+            // Redirect to the dashboard or other page
+            window.location.href = "/dashboard";
+        } else {
+            alert('Login failed: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error during login:', error);
+        alert('An error occurred during login. Please try again later.');
+    });
+}
+
+  </script>
+</body>
+</html>

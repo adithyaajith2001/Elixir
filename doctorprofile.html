@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Profile</title>
+  <link rel="stylesheet" href="doctor.css"> <!-- Link to the CSS file -->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+  <div class="icon">
+    <h2 class="logo">Elixir</h2>
+  </div>
+  <div class="menu">
+    <ul>
+      <li><a href="#">HOME</a></li>
+      <li><a href="#">ABOUT</a></li>
+      <li><a href="#">SERVICE</a></li>
+      <li><a href="#">CONTACT</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- Doctor Profile Section -->
+<div class="container">
+  <h1 class="doctor-title">Doctor Profile</h1>
+  
+  <!-- Profile Card -->
+  <div class="doctor-profile">
+    <div class="doctor-photo">
+      <img id="doctor-photo-preview" src="225-default-avatar-256.png" alt="Doctor Photo">
+      <label for="doctor-photo" class="upload-button">Change Photo</label>
+      <input type="file" id="doctor-photo" accept="image/*" style="display: none;">
+    </div>
+    <h2 class="doctor-name" id="doctor-name-display">Dr. John Doe</h2>
+  </div>
+
+  <!-- Doctor Details (Read-Only View) -->
+  <div id="doctor-details-readonly" class="doctor-details-card">
+    <h3 class="details-heading">Doctor Details</h3>
+    <p><strong>Name:</strong> <span id="doctor-name-readonly">John Doe</span></p>
+    <p><strong>Registration No:</strong> <span id="doctor-reg-no-readonly">123456</span></p>
+    <p><strong>Current Hospital:</strong> <span id="hospital-readonly">City Hospital</span></p>
+    <p><strong>Specialization:</strong> <span id="specialization-readonly">ENT</span></p>
+    <button id="edit-button" onclick="toggleEditMode()">Edit</button>
+  </div>
+
+  <!-- Patient Profile Access Card (Moved Here) -->
+  <div class="patient-access-card">
+    <h3 class="details-heading">Access Patient Profile</h3>
+    <form id="patient-form">
+      <p><strong>Enter Patient ID:</strong> <input type="text" id="patient-id" placeholder="Enter Patient ID"></p>
+      <button type="button" onclick="accessPatientProfile()">View Patient Profile</button>
+    </form>
+  </div>
+
+  <!-- Doctor Details Form (Edit Mode) -->
+  <div id="doctor-details-edit" class="doctor-details-card" style="display:none;">
+    <h3 class="details-heading">Edit Doctor Details</h3>
+    <form id="doctor-form">
+      <p><strong>Name:</strong> <input type="text" id="doctor-name" value="John Doe"></p>
+      <p><strong>Registration No:</strong> <input type="text" id="doctor-reg-no" value="123456"></p>
+      <p><strong>Current Hospital:</strong> <input type="text" id="current-hospital" value="City Hospital"></p>
+      <p><strong>Specialization:</strong> <input type="text" id="specialization" value="ENT"></p>
+      <button type="button" onclick="saveDetails()">Save</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const doctorPhotoInput = document.getElementById("doctor-photo");
+    const doctorPhotoPreview = document.getElementById("doctor-photo-preview");
+    const doctorDetailsReadonly = document.getElementById("doctor-details-readonly");
+    const doctorDetailsEdit = document.getElementById("doctor-details-edit");
+    
+    // Handle photo upload
+    doctorPhotoInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          doctorPhotoPreview.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Toggle between edit and readonly mode
+    window.toggleEditMode = () => {
+      doctorDetailsReadonly.style.display = "none";
+      doctorDetailsEdit.style.display = "block";
+    };
+
+    // Save details and switch back to readonly mode
+    window.saveDetails = () => {
+      const name = document.getElementById("doctor-name").value;
+      const regNo = document.getElementById("doctor-reg-no").value;
+      const hospital = document.getElementById("current-hospital").value;
+      const specialization = document.getElementById("specialization").value;
+
+      // Update the displayed name in both the details section and the top display
+      document.getElementById("doctor-name-readonly").textContent = name;
+      document.getElementById("doctor-name-display").textContent = "Dr. " + name;
+
+      // Update other fields
+      document.getElementById("doctor-reg-no-readonly").textContent = regNo;
+      document.getElementById("hospital-readonly").textContent = hospital;
+      document.getElementById("specialization-readonly").textContent = specialization;
+
+      doctorDetailsReadonly.style.display = "block";
+      doctorDetailsEdit.style.display = "none";
+    };
+  });
+
+  window.accessPatientProfile = () => {
+    const patientId = document.getElementById("patient-id").value;
+    
+    if (patientId) {
+      // Simulate fetching patient details based on ID and opening a new window/tab
+      // Replace this with your actual logic for fetching patient data and navigating to the profile
+      window.open(`/patient/profile/${patientId}`, '_blank');
+    } else {
+      alert("Please enter a valid Patient ID.");
+    }
+  };
+  
+
+</script>
+
+</body>
+</html>

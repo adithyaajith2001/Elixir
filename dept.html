@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Upload - General Medicine</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Upload Prescription</h2>
+    <form id="uploadForm">
+        <div class="mb-3">
+            <label for="prescriptionImage" class="form-label">Prescription Image</label>
+            <input type="file" id="prescriptionImage" class="form-control" accept="image/*" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+
+    <div id="uploadedImages" class="mt-4">
+        <h5>Uploaded Prescriptions</h5>
+        <!-- Uploaded images will be appended here -->
+    </div>
+</div>
+
+<!-- Modal for displaying uploaded image -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Prescription Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="Prescription Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function goToHome() {
+        window.location.href = 'h.html'; // Change 'h.html' to your home page file name
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        const fileInput = document.getElementById('prescriptionImage');
+        const file = fileInput.files[0];
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('department', 'General Medicine'); // Add department data
+            formData.append('prescriptionImage', file);
+
+            // Make API request to upload the prescription
+            fetch('http://localhost:5000/api/patient/prescription/upload/General Medicine', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Prescription uploaded successfully!');
+
+                    // Create a container for the image and delete button
+                    const container = document.createElement('div');
+                    container.classList.add('image-container');
+                    
+                    // Create the image element
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.alt = 'Prescription Image';
+                        imgElement.classList.add('uploaded-image', 'img-thumbnail');
+
+                        // Add click event to show the image in the modal
+                        imgElement.onclick = function() {
+                            document.getElementById('modalImage').src = e.target.result; // Set modal image source
+                            const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                            imageModal.show(); // Show the modal
+                        };
+
+                        // Create the delete button
+                        const deleteButton = document.createElement('button');
+                        deleteButton.classList.add('delete-button', 'btn', 'btn-danger', 'btn-sm', 'ms-2');
+                        deleteButton.innerHTML = 'X'; // Label for delete button
+
+                        // Add event listener for delete button
+                        deleteButton.onclick = function() {
+                            container.remove(); // Remove the image container
+                        };
+
+                        // Append the image and delete button to the container
+                        container.appendChild(imgElement);
+                        container.appendChild(deleteButton);
+
+                        // Add the container to the uploaded images section
+                        document.getElementById('uploadedImages').appendChild(container);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Failed to upload prescription. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while uploading the prescription.');
+            });
+        }
+
+        // Reset the form
+        fileInput.value = '';
+    });
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Upload</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            background-image: url("/Front-End/Adi/Images/deptbg.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat !important;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        h2 {
+            color: #004D40;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Elixir</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Prescription Upload Form -->
+    <div class="container mt-5">
+        <h2>Upload Prescription</h2>
+        <form id="uploadForm">
+            <div class="mb-3">
+                <label for="prescriptionImage" class="form-label">Select Prescription Image</label>
+                <input type="file" class="form-control" id="prescriptionImage" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+
+        <h3 class="mt-5">Uploaded Prescriptions</h3>
+        <div id="uploadedImages" class="d-flex flex-wrap"></div>
+    </div>
+
+    <script>
+        document.getElementById("uploadForm").addEventListener("submit", async function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            const fileInput = document.getElementById("prescriptionImage");
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
+
+            // Get the JWT token from localStorage
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert("You are not logged in. Please login first.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/patient/prescriptions/upload/General Medicine', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Pass the token in the Authorization header
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("Prescription uploaded successfully!");
+                    // Optionally, you can display the uploaded prescription
+                } else {
+                    alert(result.message || "Upload failed!");
+                }
+            } catch (error) {
+                console.error("Error during upload:", error);
+                alert("An error occurred while uploading.");
+            }
+
+            // Clear the file input
+            fileInput.value = '';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Profile</title>
+  <link rel="stylesheet" href="/Front-End/Anna/patpf.css">
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div class="navbar">
+  <div class="icon">
+    <h2 class="logo">Elixir</h2>
+  </div>
+  <div class="menu">
+    <ul>
+      <li><a href="#">HOME</a></li>
+      <li><a href="#">ABOUT</a></li>
+      <li><a href="#">SERVICE</a></li>
+      <li><a href="#">CONTACT</a></li>
+    </ul>
+  </div>
+</div>
+
+<!--Patient Profile-->
+<div class="PatientTitle">
+  <h1 style="color:rgb(251, 248, 248);">Patient Profile</h1>
+</div>
+
+<div class="container">
+  <!-- Profile Card -->
+  <div class="profile-card">
+    <div class="profile-image">
+      <img id="profile-img" src="225-default-avatar-256.png" alt="Profile Image">
+      <label for="file-upload" class="upload-button">Change Photo</label>
+      <input type="file" id="file-upload" accept="image/*">
+    </div>
+    <h2 class="profile-name">Jenny</h2>
+  </div>
+
+  <!-- Patient Details (Read-Only View) -->
+  <div id="patient-details-readonly" class="patient-details-card">
+    <h3>Patient Details</h3>
+    <p><strong>Age:</strong> <span id="age-readonly">35</span></p>
+    <p><strong>Blood Group:</strong> <span id="blood-group-readonly">A+</span></p>
+    <p><strong>Chronic Health Issues:</strong> <span id="chronic-issues-readonly">Hypertension</span></p>
+    <p><strong>Allergies:</strong> <span id="allergies-readonly">None</span></p>
+    <p><strong>Recent Surgeries:</strong> <span id="recent-surgeries-readonly">Appendectomy</span></p>
+    <button id="edit-button" onclick="toggleEditMode()">Edit</button>
+  </div>
+
+  <!-- Patient Details Form (Edit Mode) -->
+  <div id="patient-details-edit" class="patient-details-card" style="display:none;">
+    <h3>Edit Patient Details</h3>
+    <form id="patient-form">
+      <p><strong>Age:</strong> <input type="number" id="age" value="35"></p>
+      <p><strong>Blood Group:</strong> <input type="text" id="blood-group" value="A+"></p>
+      <p><strong>Chronic Health Issues:</strong>
+      <textarea id="chronic-issues">Hypertension</textarea></p>
+      <p><strong>Allergies:</strong>
+      <textarea id="allergies">None</textarea></p>
+      <p><strong>Recent Surgeries:</strong>
+      <textarea id="recent-surgeries">Appendectomy</textarea></p>
+      <button type="button" onclick="saveDetails()">Save</button>
+    </form>
+  </div>
+</div>
+
+<!-- Right Side Folder Section -->
+<div class="folder-section">
+  <div class="folder-grid">
+    <div class="folder">
+      <a href="/Front-End/Adi/bills.html">
+      <h4>Bills</h4>
+      </a>
+    </div>
+    <div class="folder">
+      <a href="/Front-End/Adi/immunisation.html">
+      <h4>Immunisation</h4>
+      </a>
+    </div>
+    <div class="folder">
+      <a href="/Front-End/Adi/report.html">
+      <h4>Reports</h4>
+      </a>
+    </div>
+    <div class="folder">
+      <a href="/Front-End/Adi/dept.html">
+      <h4>Departments</h4>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="patiepf.js"></script>
+<script>
+  function toggleEditMode() {
+    const readOnlyDiv = document.getElementById('patient-details-readonly');
+    const editFormDiv = document.getElementById('patient-details-edit');
+    if (editFormDiv.style.display === 'none') {
+      readOnlyDiv.style.display = 'none';
+      editFormDiv.style.display = 'block';
+    } else {
+      readOnlyDiv.style.display = 'block';
+      editFormDiv.style.display = 'none';
+    }
+  }
+
+  function saveDetails() {
+    // Get the updated values
+    const age = document.getElementById('age').value;
+    const bloodGroup = document.getElementById('blood-group').value;
+    const chronicIssues = document.getElementById('chronic-issues').value;
+    const allergies = document.getElementById('allergies').value;
+    const recentSurgeries = document.getElementById('recent-surgeries').value;
+
+    // Update the readonly view with the new values
+    document.getElementById('age-readonly').innerText = age;
+    document.getElementById('blood-group-readonly').innerText = bloodGroup;
+    document.getElementById('chronic-issues-readonly').innerText = chronicIssues;
+    document.getElementById('allergies-readonly').innerText = allergies;
+    document.getElementById('recent-surgeries-readonly').innerText = recentSurgeries;
+
+    // Switch back to readonly view
+    toggleEditMode();
+  }
+</script>
+</body>
+</html>
